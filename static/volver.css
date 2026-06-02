@@ -1,0 +1,73 @@
+body {
+
+    margin: 0;
+    padding: 0;
+
+    width: 100vw;
+    height: 100vh;
+
+    background-image: url("/static/fondo6.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    overflow: hidden;
+}
+
+.contenedor {
+
+    width: 100%;
+    height: 100%;
+
+    position: relative;
+}
+
+.boton-inicio {
+
+    position: fixed;
+
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    bottom: 160px;
+
+    z-index: 999;
+}
+
+.boton-inicio img {
+
+    width: 300px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+/* BOTÓN VOLVER */
+
+.boton-volver {
+
+    position: fixed;
+
+    right: 20px;
+
+    bottom: 20px;
+
+    z-index: 999;
+}
+
+.boton-volver img {
+
+    width: 120px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.boton-inicio img:hover,
+.boton-volver img:hover {
+
+    transform: scale(1.08);
+}

@@ -1,0 +1,98 @@
+body{
+    margin: 0;
+    padding: 0;
+
+    min-height: 100vh;
+
+    background-image: url("/static/fondo4.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2{
+    color: white;
+
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+    background-color: rgba(0, 0, 0, 0.7);
+
+    padding: 20px 40px;
+
+    border-radius: 15px;
+}
+
+ul{
+    list-style: none;
+
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 30px;
+
+    padding: 0;
+
+    width: 90%;
+
+    justify-items: center;
+}
+
+li{
+    transition: 0.3s;
+}
+
+li:hover{
+    transform: scale(1.05);
+}
+
+a{
+    text-decoration: none;
+}
+
+img{
+    width: 160px;
+
+    border-radius: 20px;
+
+    display: block;
+
+    box-shadow: 0px 0px 15px purple;
+}
+
+.boton-volver {
+
+    position: fixed;
+
+    right: 0px;
+
+    bottom: -20px;
+
+    z-index: 999;
+}
+
+.boton-volver img {
+
+    width: 100px;
+
+    border-radius: 0;
+
+    box-shadow: none;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.boton-volver img:hover {
+
+    transform: scale(1.08);
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Selecciona tu grado</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='stile.css') }}">
+
+</head>
+
+<body>
+
+    <ul>
+
+        <li>
+            <a href="/grado/1">
+                <img src="{{ url_for('static', filename='1ro.png') }}"
+                    width="200">
+            </a>
+        </li>
+
+        <li>
+            <a href="/grado/2">
+                <img src="{{ url_for('static', filename='2do.png') }}"
+                    width="200">
+            </a>
+        </li>
+
+        <li>
+            <a href="/grado/3">
+                <img src="{{ url_for('static', filename='3ro.png') }}"
+                    width="200">
+            </a>
+        </li>
+
+    </ul>
+
+    <a href="javascript:history.back()" class="boton-volver">
+
+        <img
+            src="{{ url_for('static', filename='botonvolver.png') }}"
+            >
+
+    </a>
+
+</body>
+
+</html>

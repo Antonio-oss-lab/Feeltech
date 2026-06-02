@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Selecciona si eres estudiante o administrador</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='result_style.css') }}">
+</head>
+
+<body>
+    <form action="/seleccion" method="POST">
+
+        <ul>
+
+            <li>
+
+                <button type="submit"
+                    name="boton"
+                    value="student">
+
+                    <img src="{{ url_for('static', filename='estudiante.png') }}"
+                        width="200">
+
+                </button>
+
+            </li>
+
+            <li>
+
+                <button type="submit"
+                    name="boton"
+                    value="admin">
+
+                    <img src="{{ url_for('static', filename='administrador.png') }}"
+                        width="200">
+
+                </button>
+
+            </li>
+
+        </ul>
+
+    </form>
+
+</body>
+
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Selecciona cómo te sientes</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='estyle.css') }}">
+
+</head>
+
+<body>
+
+    <ul>
+
+        <li>
+            <a href="/emocion/Hoy tuve un buen día">
+                <img src="{{ url_for('static', filename='emocion1.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/Me siento tranquilo">
+                <img src="{{ url_for('static', filename='emocion2.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/Todo normal por ahora">
+                <img src="{{ url_for('static', filename='emocion3.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/Estoy muy cansado">
+                <img src="{{ url_for('static', filename='emocion4.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/Siento mucha presión">
+                <img src="{{ url_for('static', filename='emocion5.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/Estoy preocupado por muchas cosas">
+                <img src="{{ url_for('static', filename='emocion6.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/No tengo ganas de convivir">
+                <img src="{{ url_for('static', filename='emocion7.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/Siento que nadie me entiende">
+                <img src="{{ url_for('static', filename='emocion8.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/Me siento muy enojado">
+                <img src="{{ url_for('static', filename='emocion9.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/Hoy me siento muy mal">
+                <img src="{{ url_for('static', filename='emocion10.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/Me siento muy nervioso">
+                <img src="{{ url_for('static', filename='emocion11.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/emocion/Me siento apartado del grupo">
+                <img src="{{ url_for('static', filename='emocion12.png') }}">
+            </a>
+        </li>
+
+    </ul>
+
+    <a href="javascript:history.back()" class="boton-volver">
+
+        <img
+            src="{{ url_for('static', filename='botonvolver.png') }}"
+            alt="Volver">
+
+    </a>
+
+</body>
+
+</html>

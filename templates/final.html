@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Resumen de emociones</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='final.css') }}">
+
+</head>
+
+<body>
+
+    <h1>RESUMEN DE EMOCIONES POR GRUPO</h1>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>GRUPO</th>
+
+                {% for emocion in emociones %}
+
+                    <th>
+
+                        {{ loop.index }}.<br>
+
+                        {{ emocion }}
+
+                    </th>
+
+                {% endfor %}
+
+                <th>
+                    TOTAL DE<br>RESPUESTAS
+                </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for grupo in grupos %}
+
+            <tr>
+
+                <td>
+
+                    {{ grupo[0] }}° {{ grupo[1] }}
+
+                </td>
+
+                {% set total_grupo = namespace(valor=0) %}
+
+                {% for emocion in emociones %}
+
+                    <td>
+
+                        {{ resumen[grupo][emocion] }}
+
+                    </td>
+
+                    {% set total_grupo.valor = total_grupo.valor + resumen[grupo][emocion] %}
+
+                {% endfor %}
+
+                <td>
+
+                    <strong>
+
+                        {{ total_grupo.valor }}
+
+                    </strong>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+        <tfoot>
+
+            <tr>
+
+                <td>
+
+                    TOTAL POR<br>EMOCIÓN
+
+                </td>
+
+                {% for emocion in emociones %}
+
+                    <td>
+
+                        {{ totales_emocion[emocion] }}
+
+                    </td>
+
+                {% endfor %}
+
+                <td>
+
+                    {{ total_general }}
+
+                </td>
+
+            </tr>
+
+        </tfoot>
+
+    </table>
+
+</body>
+
+</html>

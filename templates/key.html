@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Acceso administrador</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='key.css') }}">
+
+</head>
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>
+            ACCESO ADMINISTRADOR
+        </h1>
+
+        <form action="{{ url_for('datos') }}" method="POST">
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Ingresa la contraseña"
+                required
+            >
+
+            <button type="submit">
+
+                Entrar
+
+            </button>
+
+        </form>
+
+        {% if error %}
+
+            <div class="error">
+
+                {{ error }}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</body>
+
+</html>
