@@ -1,0 +1,105 @@
+body{
+
+    margin: 0;
+    padding: 0;
+
+    min-height: 100vh;
+
+    background-image: url("/static/fondo0.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    overflow: hidden;
+}
+
+.contenedor{
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+}
+
+form{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 25px;
+}
+
+input{
+
+    width: 420px;
+
+    padding: 20px;
+
+    border-radius: 18px;
+
+    border: none;
+
+    outline: none;
+
+    font-size: 26px;
+
+    text-align: center;
+}
+
+button{
+
+    padding: 18px 45px;
+
+    border: none;
+
+    border-radius: 18px;
+
+    background: #1f8bff;
+
+    color: white;
+
+    font-size: 24px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+button:hover{
+
+    transform: scale(1.05);
+}
+
+
+.boton-volver{
+
+    position: fixed;
+
+    right: 20px;
+
+    bottom: 20px;
+
+    z-index: 999;
+}
+
+.boton-volver img{
+
+    width: 110px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.boton-volver img:hover{
+
+    transform: scale(1.08);
+}
