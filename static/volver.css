@@ -30,14 +30,14 @@ body {
 
     transform: translateX(-50%);
 
-    bottom: 160px;
+    bottom: 0px;
 
     z-index: 999;
 }
 
 .boton-inicio img {
 
-    width: 300px;
+    width: 200px;
 
     cursor: pointer;
 
