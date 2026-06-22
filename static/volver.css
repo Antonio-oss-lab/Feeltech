@@ -3,8 +3,8 @@ body {
     margin: 0;
     padding: 0;
 
-    width: 60vw;
-    height: 60vh;
+    width: 70vw;
+    height: 70vh;
 
     background-image: url("/static/fondo6.png");
     background-size: cover;
