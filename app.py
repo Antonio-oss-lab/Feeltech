@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for
 import sqlite3
 import requests
+from datetime import datetime
+import os
 
 app = Flask(__name__)
 
@@ -11,9 +13,12 @@ emocion_guardada = ""
 NUMERO_WHATSAPP = "5214151407013"
 APIKEY_CALLMEBOT = "8372026"
 
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "data_base_1.db")
+
 def crear_db():
 
-    conexion = sqlite3.connect("data_base_1.db")
+    conexion = sqlite3.connect(DB_PATH)
     cursor = conexion.cursor()
 
     cursor.execute(
@@ -23,6 +28,19 @@ def crear_db():
             grado TEXT,
             grupo TEXT,
             emocion TEXT
+        )
+        """
+    )
+
+    cursor.execute(
+        """
+        CREATE TABLE IF NOT EXISTS respuestas_personales (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            grado TEXT,
+            grupo TEXT,
+            nombre TEXT,
+            fecha TEXT,
+            hora TEXT
         )
         """
     )
@@ -111,7 +129,9 @@ def anonimo(respuesta):
     if respuesta == "Personal":
         return render_template("nombre.html")
 
-    conexion = sqlite3.connect("data_base_1.db")
+    crear_db()
+
+    conexion = sqlite3.connect(DB_PATH)
     cursor = conexion.cursor()
 
     cursor.execute(
@@ -134,7 +154,33 @@ def anonimo(respuesta):
 @app.route("/guardar_nombre", methods=["POST"])
 def guardar_nombre():
 
+    crear_db()
+
     nombre = request.form["nombre"]
+
+    fecha_hora = datetime.now()
+    fecha = fecha_hora.strftime("%d/%m/%Y")
+    hora = fecha_hora.strftime("%H:%M:%S")
+
+    conexion = sqlite3.connect(DB_PATH)
+    cursor = conexion.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO respuestas_personales (grado, grupo, nombre, fecha, hora)
+        VALUES (?, ?, ?, ?, ?)
+        """,
+        (
+            grado_guardado,
+            grupo_guardado,
+            nombre,
+            fecha,
+            hora
+        )
+    )
+
+    conexion.commit()
+    conexion.close()
 
     enviar_whatsapp(nombre)
 
@@ -153,6 +199,8 @@ def datos():
     password = request.form.get("password")
 
     if password == "1234":
+
+        crear_db()
 
         emociones = [
             "Hoy tuve un buen día",
@@ -175,7 +223,7 @@ def datos():
             "3A", "3B", "3C"
         ]
 
-        conexion = sqlite3.connect("data_base_1.db")
+        conexion = sqlite3.connect(DB_PATH)
         cursor = conexion.cursor()
 
         cursor.execute("""
@@ -232,6 +280,9 @@ def datos():
             "key.html",
             error="Contraseña incorrecta"
         )
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 if __name__ == "__main__":
     app.run(debug=True)
