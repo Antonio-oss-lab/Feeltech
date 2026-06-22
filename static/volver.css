@@ -44,30 +44,7 @@ body {
     transition: 0.3s;
 }
 
-/* BOTÓN VOLVER */
-
-.boton-volver {
-
-    position: fixed;
-
-    right: 20px;
-
-    bottom: 20px;
-
-    z-index: 999;
-}
-
-.boton-volver img {
-
-    width: 120px;
-
-    cursor: pointer;
-
-    transition: 0.3s;
-}
-
-.boton-inicio img:hover,
-.boton-volver img:hover {
+.boton-inicio img:hover{
 
     transform: scale(1.08);
 }
