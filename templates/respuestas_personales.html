@@ -1,13 +1,15 @@
-<!DOCTYPE html>
+</html><!DOCTYPE html>
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
 
     <title>Respuestas personales</title>
 
     <link rel="stylesheet"
         href="{{ url_for('static', filename='respuestas_personales.css') }}">
+
 </head>
 
 <body>
@@ -17,13 +19,16 @@
     <table>
 
         <thead>
+
             <tr>
                 <th>Grado</th>
                 <th>Grupo</th>
                 <th>Nombre</th>
+                <th>Emoción</th>
                 <th>Fecha</th>
                 <th>Hora</th>
             </tr>
+
         </thead>
 
         <tbody>
@@ -36,6 +41,7 @@
                 <td>{{ dato[3] }}</td>
                 <td>{{ dato[4] }}</td>
                 <td>{{ dato[5] }}</td>
+                <td>{{ dato[6] }}</td>
             </tr>
 
             {% endfor %}
@@ -45,7 +51,11 @@
     </table>
 
     <a href="javascript:history.back()" class="boton-volver">
-        <img src="{{ url_for('static', filename='botonvolver.png') }}">
+
+        <img
+            src="{{ url_for('static', filename='botonvolver.png') }}"
+            alt="Volver">
+
     </a>
 
 </body>
