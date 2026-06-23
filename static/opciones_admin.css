@@ -1,0 +1,61 @@
+body{
+    margin: 0;
+    padding: 0;
+
+    min-height: 100vh;
+
+    background-image: url("/static/fondo0.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+ul{
+    list-style: none;
+    display: flex;
+    gap: 90px;
+
+    position: relative;
+    top: 50px;
+    right: 40px;
+}
+
+li{
+    transition: 0.3s;
+}
+
+li:hover{
+    transform: scale(1.05);
+}
+
+ul li img{
+    width: 200px;
+    display: block;
+}
+
+.boton-volver{
+    position: fixed;
+
+    right: 20px;
+    bottom: 20px;
+
+    z-index: 999;
+}
+
+.boton-volver img{
+    width: 110px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.boton-volver img:hover{
+    transform: scale(1.08);
+}
