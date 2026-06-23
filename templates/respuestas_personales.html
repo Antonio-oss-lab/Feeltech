@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Respuestas personales</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='respuestas_personales.css') }}">
+</head>
+
+<body>
+
+    <h1>RESPUESTAS PERSONALES</h1>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Grado</th>
+                <th>Grupo</th>
+                <th>Nombre</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for dato in respuestas %}
+
+            <tr>
+                <td>{{ dato[1] }}</td>
+                <td>{{ dato[2] }}</td>
+                <td>{{ dato[3] }}</td>
+                <td>{{ dato[4] }}</td>
+                <td>{{ dato[5] }}</td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    <a href="javascript:history.back()" class="boton-volver">
+        <img src="{{ url_for('static', filename='botonvolver.png') }}">
+    </a>
+
+</body>
+
+</html>

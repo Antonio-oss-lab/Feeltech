@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Opciones administrador</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='opciones_admin.css') }}">
+</head>
+
+<body>
+
+    <ul>
+
+        <li>
+            <a href="/respuestas_generales">
+                <img src="{{ url_for('static', filename='generales.png') }}">
+            </a>
+        </li>
+
+        <li>
+            <a href="/respuestas_personales">
+                <img src="{{ url_for('static', filename='personales.png') }}">
+            </a>
+        </li>
+
+    </ul>
+
+</body>
+
+</html>
