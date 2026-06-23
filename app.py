@@ -76,6 +76,74 @@ def enviar_whatsapp(nombre):
     except Exception as e:
         print("Error WhatsApp:", e)
 
+def obtener_resumen_general():
+
+    emociones = [
+        "Hoy tuve un buen día",
+        "Me siento tranquilo",
+        "Todo normal por ahora",
+        "Estoy muy cansado",
+        "Siento mucha presión",
+        "Estoy preocupado por muchas cosas",
+        "No tengo ganas de convivir",
+        "Siento que nadie me entiende",
+        "Me siento muy enojado",
+        "Hoy me siento muy mal",
+        "Me siento muy nervioso",
+        "Me siento apartado del grupo"
+    ]
+
+    grupos = [
+        "1A", "1B", "1C",
+        "2A", "2B", "2C",
+        "3A", "3B", "3C"
+    ]
+
+    conexion = sqlite3.connect(DB_PATH)
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT grado, grupo, emocion, COUNT(*)
+        FROM alumnos
+        GROUP BY grado, grupo, emocion
+    """)
+
+    registros = cursor.fetchall()
+    conexion.close()
+
+    resumen = {}
+
+    for grupo in grupos:
+        resumen[grupo] = {}
+
+        for emocion in emociones:
+            resumen[grupo][emocion] = 0
+
+    for grado, grupo, emocion, cantidad in registros:
+
+        if grado is None or grupo is None or emocion is None:
+            continue
+
+        clave_grupo = str(grado) + str(grupo)
+
+        if clave_grupo in resumen and emocion in resumen[clave_grupo]:
+            resumen[clave_grupo][emocion] = cantidad
+
+    totales_emocion = {}
+
+    for emocion in emociones:
+
+        total = 0
+
+        for grupo in grupos:
+            total += resumen[grupo][emocion]
+
+        totales_emocion[emocion] = total
+
+    total_general = sum(totales_emocion.values())
+
+    return emociones, grupos, resumen, totales_emocion, total_general
+
 @app.route("/")
 def inicio():
     return render_template("result_student.html")
@@ -199,81 +267,7 @@ def datos():
     password = request.form.get("password")
 
     if password == "1234":
-
-        crear_db()
-
-        emociones = [
-            "Hoy tuve un buen día",
-            "Me siento tranquilo",
-            "Todo normal por ahora",
-            "Estoy muy cansado",
-            "Siento mucha presión",
-            "Estoy preocupado por muchas cosas",
-            "No tengo ganas de convivir",
-            "Siento que nadie me entiende",
-            "Me siento muy enojado",
-            "Hoy me siento muy mal",
-            "Me siento muy nervioso",
-            "Me siento apartado del grupo"
-        ]
-
-        grupos = [
-            "1A", "1B", "1C",
-            "2A", "2B", "2C",
-            "3A", "3B", "3C"
-        ]
-
-        conexion = sqlite3.connect(DB_PATH)
-        cursor = conexion.cursor()
-
-        cursor.execute("""
-            SELECT grado, grupo, emocion, COUNT(*)
-            FROM alumnos
-            GROUP BY grado, grupo, emocion
-        """)
-
-        registros = cursor.fetchall()
-        conexion.close()
-
-        resumen = {}
-
-        for grupo in grupos:
-            resumen[grupo] = {}
-
-            for emocion in emociones:
-                resumen[grupo][emocion] = 0
-
-        for grado, grupo, emocion, cantidad in registros:
-
-            if grado is None or grupo is None or emocion is None:
-                continue
-
-            clave_grupo = str(grado) + str(grupo)
-
-            if clave_grupo in resumen and emocion in resumen[clave_grupo]:
-                resumen[clave_grupo][emocion] = cantidad
-
-        totales_emocion = {}
-
-        for emocion in emociones:
-
-            total = 0
-
-            for grupo in grupos:
-                total += resumen[grupo][emocion]
-
-            totales_emocion[emocion] = total
-
-        total_general = sum(totales_emocion.values())
-
-        return render_template(
-            "final.html",
-            emociones=emociones,
-            grupos=grupos,
-            resumen=resumen,
-            totales_emocion=totales_emocion,
-            total_general=total_general
-        )
+        return render_template("opciones_admin.html")
 
     else:
         return render_template(
@@ -281,8 +275,46 @@ def datos():
             error="Contraseña incorrecta"
         )
 
-if __name__ == "__main__":
-    app.run(debug=True)
+@app.route("/respuestas_generales")
+def respuestas_generales():
+
+    crear_db()
+
+    emociones, grupos, resumen, totales_emocion, total_general = obtener_resumen_general()
+
+    return render_template(
+        "final.html",
+        emociones=emociones,
+        grupos=grupos,
+        resumen=resumen,
+        totales_emocion=totales_emocion,
+        total_general=total_general
+    )
+
+@app.route("/respuestas_personales")
+def respuestas_personales():
+
+    crear_db()
+
+    conexion = sqlite3.connect(DB_PATH)
+    cursor = conexion.cursor()
+
+    cursor.execute(
+        """
+        SELECT *
+        FROM respuestas_personales
+        ORDER BY id DESC
+        """
+    )
+
+    respuestas = cursor.fetchall()
+
+    conexion.close()
+
+    return render_template(
+        "respuestas_personales.html",
+        respuestas=respuestas
+    )
 
 if __name__ == "__main__":
     app.run(debug=True)
