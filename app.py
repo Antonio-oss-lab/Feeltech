@@ -39,11 +39,17 @@ def crear_db():
             grado TEXT,
             grupo TEXT,
             nombre TEXT,
+            emocion TEXT,
             fecha TEXT,
             hora TEXT
         )
         """
     )
+
+    try:
+        cursor.execute("ALTER TABLE respuestas_personales ADD COLUMN emocion TEXT")
+    except sqlite3.OperationalError:
+        pass
 
     conexion.commit()
     conexion.close()
@@ -235,13 +241,15 @@ def guardar_nombre():
 
     cursor.execute(
         """
-        INSERT INTO respuestas_personales (grado, grupo, nombre, fecha, hora)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO respuestas_personales
+        (grado, grupo, nombre, emocion, fecha, hora)
+        VALUES (?, ?, ?, ?, ?, ?)
         """,
         (
             grado_guardado,
             grupo_guardado,
             nombre,
+            emocion_guardada,
             fecha,
             hora
         )
@@ -301,7 +309,7 @@ def respuestas_personales():
 
     cursor.execute(
         """
-        SELECT *
+        SELECT id, grado, grupo, nombre, emocion, fecha, hora
         FROM respuestas_personales
         ORDER BY id DESC
         """
