@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Agente FeelTech</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="contenedor">
+
+        <h1>Agente FeelTech</h1>
+
+        <p>
+            Haz una pregunta sobre los datos
+            de FeelTech.
+        </p>
+
+
+        <form method="POST">
+
+            <input
+                type="text"
+                name="pregunta"
+                placeholder="¿Cómo está 2B?"
+                required
+            >
+
+
+            <button type="submit">
+                Preguntar
+            </button>
+
+        </form>
+
+
+        {% if respuesta %}
+
+            <div class="respuesta">
+
+                <h2>Respuesta</h2>
+
+                <p>
+                    {{ respuesta }}
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+    </div>
+
+</body>
+
+</html>

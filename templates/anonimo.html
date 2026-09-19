@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Tipo de respuesta</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='css/anonimo.css') }}">
+
+</head>
+
+<body>
+
+    <ul>
+
+        <!-- BOTÓN ANÓNIMO -->
+
+        <li>
+
+            <a href="/anonimo/Anonimo">
+
+                <img
+                    src="{{ url_for('static', filename='images/anonimo.png') }}">
+
+            </a>
+
+        </li>
+
+        <!-- BOTÓN PERSONAL -->
+
+        <li>
+
+            <a href="/anonimo/Personal">
+
+                <img
+                    src="{{ url_for('static', filename='images/personal.png') }}">
+
+            </a>
+
+        </li>
+
+    </ul>
+
+    <a href="javascript:history.back()" class="boton-volver">
+
+        <img
+            src="{{ url_for('static', filename='images/botonvolver.png') }}"
+        >
+
+    </a>
+
+</body>
+
+</html>
