@@ -3,6 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
     <title>Selecciona si eres estudiante o administrador</title>
 
@@ -21,8 +28,7 @@
                     name="boton"
                     value="student">
 
-                    <img src="{{ url_for('static', filename='images/estudiante.png') }}"
-                        width="200">
+                    Estudiante
 
                 </button>
 
@@ -34,8 +40,7 @@
                     name="boton"
                     value="admin">
 
-                    <img src="{{ url_for('static', filename='images/administrador.png') }}"
-                        width="200">
+                    Administrador
 
                 </button>
 

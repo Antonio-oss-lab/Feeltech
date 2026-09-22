@@ -1,40 +1,81 @@
-body {
-    font-family: Arial;
-    text-align: center;
-    background-image: url("images/fondo3.png");
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    height: 100vh;
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+
+/* ==============================
+   VARIABLES
+============================== */
+
+:root {
+    --azul: rgb(42, 114, 172);
+    --verde: rgb(59, 177, 8);
+
+    --azul-claro: rgb(160, 199, 224);
+    --verde-claro: rgb(152, 230, 142);
+
+    --azul-fondo: rgb(126, 166, 189);
+    --verde-fondo: rgb(94, 146, 81);
+
+    --texto: rgb(35, 60, 75);
 }
 
-body{
+
+/* ==============================
+   GENERAL
+============================== */
+
+* {
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+
+html,
+body {
     margin: 0;
     padding: 0;
+    min-height: 100%;
+}
+
+
+/* ==============================
+   BODY
+============================== */
+
+body {
 
     min-height: 100vh;
 
     display: flex;
+
     justify-content: center;
     align-items: center;
-    flex-direction: column; 
 
-    background-color: black;
+    padding: 50px;
 
-    font-family: Arial, Helvetica, sans-serif
+    color: var(--texto);
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--azul-fondo) 0%,
+            var(--azul-claro) 45%,
+            var(--verde-claro) 100%
+        );
 }
 
-h1{
-    color: white;
-    margin-bottom: 40px;
-}
+
+/* ==============================
+   LISTA
+============================== */
 
 ul {
+
     display: flex;
+
     justify-content: center;
     align-items: center;
 
-    gap: 100px;
+    gap: 45px;
 
     list-style: none;
 
@@ -42,35 +83,397 @@ ul {
     margin: 0;
 }
 
+
+/* ==============================
+   TARJETAS
+============================== */
+
 li {
-    display: inline-block;
-    margin-top: 130px;
-    transition: 0.3s;
+
+    width: 270px;
+    height: 270px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    border-radius: 28px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(202, 229, 247, 0.95),
+            rgba(152, 230, 142, 0.95)
+        );
+
+    border: 3px solid rgba(42, 114, 172, 0.8);
+
+    box-shadow:
+        0 12px 25px rgba(42, 114, 172, 0.20);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
 }
 
-li:hover{
-    transform: scale(0.70);
-}
 
-a{
+/* ==============================
+   ENLACE
+============================== */
+
+li a {
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
     text-decoration: none;
-    color: white;
+
+    border-radius: 25px;
 }
 
-img{
+
+/* ==============================
+   HOVER TARJETA
+============================== */
+
+li:hover {
+
+    transform: translateY(-10px) scale(1.02);
+
+    border-color: var(--verde);
+
+    box-shadow:
+        0 18px 35px rgba(59, 177, 8, 0.25);
+}
+
+
+/* ==============================
+   IMÁGENES
+============================== */
+
+li img {
+
     width: 200px;
+
+    max-width: 82%;
+    max-height: 82%;
+
+    object-fit: contain;
+
     display: block;
-    background: transparent;
+
+    transition:
+        transform 0.25s ease;
 }
 
-p{
-    text-align: center;
-    font-size: 25px;
+
+li:hover img {
+
+    transform: scale(1.08);
 }
 
-button{
-    background: transparent;
-    border: none;
+
+/* ==============================
+   BOTÓN VOLVER
+============================== */
+
+.boton-volver {
+
+    position: fixed;
+
+    left: 30px;
+    bottom: 30px;
+
+    width: 65px;
+    height: 65px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background: var(--azul-claro);
+
+    border: 3px solid var(--azul);
+
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 18px rgba(42, 114, 172, 0.20);
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* ==============================
+   HOVER VOLVER
+============================== */
+
+.boton-volver:hover {
+
+    transform: translateY(-5px);
+
+    background: var(--verde-claro);
+
+    border-color: var(--verde);
+
+    box-shadow:
+        0 12px 22px rgba(59, 177, 8, 0.25);
+}
+
+
+/* ==============================
+   IMAGEN VOLVER
+============================== */
+
+.boton-volver img {
+
+    width: 42px;
+    height: 42px;
+
+    object-fit: contain;
+
+    display: block;
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+.boton-volver:hover img {
+
+    transform: scale(1.08);
+}
+
+
+/* ==============================
+   RESPONSIVE
+============================== */
+
+@media (max-width: 950px) {
+
+    body {
+        padding: 40px 20px;
+    }
+
+    ul {
+        gap: 25px;
+    }
+
+    li {
+        width: 230px;
+        height: 230px;
+    }
+
+    li img {
+        width: 175px;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    body {
+
+        padding: 90px 20px;
+
+        align-items: flex-start;
+    }
+
+    ul {
+
+        flex-direction: column;
+
+        gap: 25px;
+    }
+
+    li {
+
+        width: 230px;
+        height: 230px;
+    }
+
+    li img {
+
+        width: 170px;
+    }
+
+    .boton-volver {
+
+        left: 20px;
+        bottom: 20px;
+
+        width: 60px;
+        height: 60px;
+    }
+
+    .boton-volver img {
+
+        width: 38px;
+        height: 38px;
+    }
+}
+
+/* =========================================
+   EMOCIONES
+   No modifica los botones de estudiante/admin
+========================================= */
+
+ul.emociones {
+    width: min(1100px, 100%);
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 25px;
+
+    list-style: none;
+
     padding: 0;
-    cursor: pointer;
+    margin: 0;
+}
+
+
+/* =========================================
+   TARJETAS DE EMOCIONES
+========================================= */
+
+ul.emociones li {
+
+    width: 100%;
+    height: 220px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            var(--azul-claro),
+            var(--verde-claro)
+        );
+
+    border: 3px solid var(--azul);
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 10px 22px rgba(42, 114, 172, 0.18);
+
+    overflow: hidden;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* =========================================
+   ENLACE DE EMOCIÓN
+========================================= */
+
+ul.emociones li a {
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    text-decoration: none;
+}
+
+
+/* =========================================
+   IMAGEN DE EMOCIÓN
+========================================= */
+
+ul.emociones li img {
+
+    width: 180px;
+    max-width: 82%;
+    max-height: 82%;
+
+    object-fit: contain;
+
+    transition:
+        transform 0.25s ease;
+}
+
+
+/* =========================================
+   HOVER EMOCIÓN
+========================================= */
+
+ul.emociones li:hover {
+
+    transform: translateY(-7px);
+
+    border-color: var(--verde);
+
+    box-shadow:
+        0 16px 30px rgba(59, 177, 8, 0.22);
+}
+
+
+ul.emociones li:hover img {
+
+    transform: scale(1.06);
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 900px) {
+
+    ul.emociones {
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 20px;
+    }
+
+}
+
+
+@media (max-width: 650px) {
+
+    ul.emociones {
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 16px;
+    }
+
+    ul.emociones li {
+
+        height: 190px;
+    }
+
+    ul.emociones li img {
+
+        width: 150px;
+    }
+
 }

@@ -8,7 +8,7 @@
     <title>Selecciona tu grado</title>
 
     <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/select_1.css') }}">
+        href="{{ url_for('static', filename='css/result_style.css') }}">
 
 </head>
 
@@ -18,33 +18,26 @@
 
         <li>
             <a href="/grado/1">
-                <img src="{{ url_for('static', filename='images/1ro.png') }}"
-                    width="200">
+                Primer grado
             </a>
         </li>
 
         <li>
             <a href="/grado/2">
-                <img src="{{ url_for('static', filename='images/2do.png') }}"
-                    width="200">
+                Segundo grado
             </a>
         </li>
 
         <li>
             <a href="/grado/3">
-                <img src="{{ url_for('static', filename='images/3ro.png') }}"
-                    width="200">
+                Tercer grado
             </a>
         </li>
 
     </ul>
-
-    <a href="javascript:history.back()" class="boton-volver">
-
-        <img
-            src="{{ url_for('static', filename='images/botonvolver.png') }}"
-            >
-
+    
+    <a href="/" class="boton-volver">
+        Volver
     </a>
 
 </body>

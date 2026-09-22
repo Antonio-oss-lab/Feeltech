@@ -8,13 +8,13 @@
     <title>Selecciona cómo te sientes</title>
 
     <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/select_e.css') }}">
+        href="{{ url_for('static', filename='css/result_style.css') }}">
 
 </head>
 
 <body>
 
-    <ul>
+    <ul class="emociones">
 
         <li>
             <a href="/emocion/Hoy tuve un buen día">
@@ -90,12 +90,8 @@
 
     </ul>
 
-    <a href="javascript:history.back()" class="boton-volver">
-
-        <img
-            src="{{ url_for('static', filename='images/botonvolver.png') }}"
-            alt="Volver">
-
+    <a href="/" class="boton-volver">
+        volver
     </a>
 
 </body>
