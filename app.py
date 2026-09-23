@@ -7,24 +7,80 @@ from flask import (
     session
 )
 
+import requests
+
 from datos import datos_feeltech
-
 from data_base import Database
-
-from whatsapp import WhatsApp
-
 from agente import procesar_pregunta
 
 
 app = Flask(__name__)
 
-
 app.secret_key = "feeltech_clave_secreta"
 
 
-db = Database()
+# ==========================================
+# WHATSAPP
+# ==========================================
 
-whatsapp = WhatsApp()
+NUMERO_WHATSAPP = "5214151407013"
+
+APIKEY_CALLMEBOT = "8372026"
+
+
+def enviar_whatsapp(
+    nombre,
+    grado,
+    grupo,
+    emocion
+):
+
+    mensaje = f"""
+Nueva respuesta personal FeelTech
+
+Nombre: {nombre}
+Grado: {grado}
+Grupo: {grupo}
+Emoción: {emocion}
+"""
+
+    try:
+
+        respuesta = requests.get(
+            "https://api.callmebot.com/whatsapp.php",
+
+            params={
+                "phone": NUMERO_WHATSAPP,
+                "text": mensaje,
+                "apikey": APIKEY_CALLMEBOT
+            },
+
+            timeout=10
+        )
+
+        print(
+            "Respuesta de CallMeBot:",
+            respuesta.text
+        )
+
+        print(
+            "Código:",
+            respuesta.status_code
+        )
+
+    except Exception as e:
+
+        print(
+            "Error al enviar WhatsApp:",
+            e
+        )
+
+
+# ==========================================
+# BASE DE DATOS
+# ==========================================
+
+db = Database()
 
 
 # ==========================================
@@ -79,20 +135,17 @@ def seleccion():
         "boton"
     )
 
-
     if boton == "admin":
 
         return render_template(
             "key.html"
         )
 
-
     elif boton == "student":
 
         return render_template(
             "select_1.html"
         )
-
 
     return redirect(
         url_for("inicio")
@@ -154,7 +207,6 @@ def anonimo(respuesta):
             "nombre.html"
         )
 
-
     grado_guardado = session.get(
         "grado"
     )
@@ -167,19 +219,14 @@ def anonimo(respuesta):
         "emocion"
     )
 
-
     db.guardar_respuesta_general(
 
         grado_guardado,
-
         grupo_guardado,
-
         emocion_guardada
     )
 
-
     session.clear()
-
 
     return redirect(
         url_for("volver")
@@ -200,7 +247,6 @@ def guardar_nombre():
         "nombre"
     )
 
-
     grado_guardado = session.get(
         "grado"
     )
@@ -213,33 +259,29 @@ def guardar_nombre():
         "emocion"
     )
 
+    # Guardar en la base de datos
 
     db.guardar_respuesta_personal(
 
         grado_guardado,
-
         grupo_guardado,
-
         nombre,
-
         emocion_guardada
     )
 
+    # Enviar a WhatsApp
 
-    whatsapp.enviar(
+    enviar_whatsapp(
 
         nombre,
-
         grado_guardado,
-
         grupo_guardado,
-
         emocion_guardada
     )
 
+    # Limpiar sesión
 
     session.clear()
-
 
     return redirect(
         url_for("volver")
@@ -262,18 +304,15 @@ def datos():
             "key.html"
         )
 
-
     password = request.form.get(
         "password"
     )
-
 
     if password == "1234":
 
         return render_template(
             "opciones_admin.html"
         )
-
 
     return render_template(
         "key.html",
@@ -290,29 +329,23 @@ def respuestas_generales():
 
     registros = db.obtener_resumen()
 
-
     emociones = datos_feeltech[
         "emociones"
     ]
-
 
     grupos = datos_feeltech[
         "grupos_completos"
     ]
 
-
     resumen = {}
-
 
     for grupo in grupos:
 
         resumen[grupo] = {}
 
-
         for emocion in emociones:
 
             resumen[grupo][emocion] = 0
-
 
     for (
         grado,
@@ -329,13 +362,11 @@ def respuestas_generales():
 
             continue
 
-
         clave_grupo = (
             str(grado)
             +
             str(grupo)
         )
-
 
         if (
             clave_grupo in resumen
@@ -349,14 +380,11 @@ def respuestas_generales():
                 clave_grupo
             ][emocion] = cantidad
 
-
     totales_emocion = {}
-
 
     for emocion in emociones:
 
         total = 0
-
 
         for grupo in grupos:
 
@@ -364,16 +392,13 @@ def respuestas_generales():
                 grupo
             ][emocion]
 
-
         totales_emocion[
             emocion
         ] = total
 
-
     total_general = sum(
         totales_emocion.values()
     )
-
 
     return render_template(
 
@@ -385,11 +410,9 @@ def respuestas_generales():
 
         resumen=resumen,
 
-        totales_emocion=
-        totales_emocion,
+        totales_emocion=totales_emocion,
 
-        total_general=
-        total_general
+        total_general=total_general
     )
 
 
@@ -405,7 +428,6 @@ def respuestas_personales():
     respuestas = (
         db.obtener_respuestas_personales()
     )
-
 
     return render_template(
 
@@ -427,18 +449,15 @@ def agente():
 
     respuesta = ""
 
-
     if request.method == "POST":
 
         pregunta = request.form.get(
             "pregunta"
         )
 
-
         respuesta = procesar_pregunta(
             pregunta
         )
-
 
     return render_template(
 
