@@ -4,36 +4,40 @@ from flask import (
     request,
     redirect,
     url_for,
-    session
+    session,
+    send_file,
+    jsonify
 )
 
 import requests
+import sqlite3
+import os
+import pyttsx3
+
+from io import BytesIO
 
 from datos import datos_feeltech
 from data_base import Database
-from agente import procesar_pregunta
 
 
 app = Flask(__name__)
-
 app.secret_key = "feeltech_clave_secreta"
-
-
-# ==========================================
-# WHATSAPP
-# ==========================================
 
 NUMERO_WHATSAPP = "5214151407013"
 
 APIKEY_CALLMEBOT = "8372026"
 
 
-def enviar_whatsapp(
-    nombre,
-    grado,
-    grupo,
-    emocion
-):
+PREGUNTAS_AUDIO = [
+    "¿Cómo te sentiste hoy?",
+    "¿Cómo te has sentido durante estos días?",
+    "¿Hay algo que te haya hecho sentir bien?",
+    "¿Hay algo que te haya preocupado o puesto nervioso?",
+    "¿Qué crees que podría ayudarte a sentirte mejor?"
+]
+
+
+def enviar_whatsapp(nombre, grado, grupo, emocion):
 
     mensaje = f"""
 Nueva respuesta personal FeelTech
@@ -48,44 +52,120 @@ Emoción: {emocion}
 
         respuesta = requests.get(
             "https://api.callmebot.com/whatsapp.php",
-
             params={
                 "phone": NUMERO_WHATSAPP,
                 "text": mensaje,
                 "apikey": APIKEY_CALLMEBOT
             },
-
             timeout=10
         )
 
-        print(
-            "Respuesta de CallMeBot:",
-            respuesta.text
-        )
-
-        print(
-            "Código:",
-            respuesta.status_code
-        )
+        print("Respuesta de CallMeBot:", respuesta.text)
+        print("Código:", respuesta.status_code)
 
     except Exception as e:
 
-        print(
-            "Error al enviar WhatsApp:",
-            e
-        )
+        print("Error al enviar WhatsApp:", e)
 
-
-# ==========================================
-# BASE DE DATOS
-# ==========================================
 
 db = Database()
 
 
-# ==========================================
-# INICIO
-# ==========================================
+def crear_base_audio():
+
+    conexion = sqlite3.connect("audios.db")
+
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS audios (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            grado TEXT,
+            grupo TEXT,
+            nombre TEXT,
+            numero_pregunta INTEGER,
+            pregunta TEXT,
+            respuesta_texto TEXT,
+            audio_pregunta BLOB,
+            audio_respuesta BLOB,
+            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    conexion.commit()
+
+    conexion.close()
+
+
+crear_base_audio()
+
+
+def crear_audio_pregunta(texto):
+
+    archivo = "pregunta_temporal.wav"
+
+    try:
+
+        motor = pyttsx3.init()
+
+        motor.setProperty(
+            "rate",
+            125
+        )
+
+        motor.setProperty(
+            "volume",
+            1.0
+        )
+
+        voces = motor.getProperty(
+            "voices"
+        )
+
+        if len(voces) > 0:
+
+            motor.setProperty(
+                "voice",
+                voces[0].id
+            )
+
+        motor.save_to_file(
+            texto,
+            archivo
+        )
+
+        motor.runAndWait()
+
+        motor.stop()
+
+        if not os.path.exists(archivo):
+
+            return None
+
+        with open(
+            archivo,
+            "rb"
+        ) as archivo_audio:
+
+            audio = archivo_audio.read()
+
+        os.remove(archivo)
+
+        return audio
+
+    except Exception as e:
+
+        print(
+            "Error creando audio de pregunta:",
+            e
+        )
+
+        if os.path.exists(archivo):
+
+            os.remove(archivo)
+
+        return None
+
 
 @app.route("/")
 def inicio():
@@ -95,9 +175,263 @@ def inicio():
     )
 
 
-# ==========================================
-# VOLVER
-# ==========================================
+@app.route("/audio")
+def modo_audio():
+
+    session.clear()
+
+    return render_template(
+        "audio.html",
+        preguntas=PREGUNTAS_AUDIO
+    )
+
+
+@app.route(
+    "/guardar_datos_audio",
+    methods=["POST"]
+)
+def guardar_datos_audio():
+
+    datos = request.get_json()
+
+    if not datos:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se recibieron datos"
+        }), 400
+
+
+    grado = datos.get("grado")
+
+    grupo = datos.get("grupo")
+
+    nombre = datos.get("nombre")
+
+
+    if not grado or not grupo or not nombre:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "Faltan datos"
+        }), 400
+
+
+    session["grado_audio"] = grado
+
+    session["grupo_audio"] = grupo
+
+    session["nombre_audio"] = nombre
+
+
+    return jsonify({
+        "ok": True
+    })
+
+
+@app.route(
+    "/guardar_audio",
+    methods=["POST"]
+)
+def guardar_audio():
+
+    archivo = request.files.get("audio")
+
+    if not archivo:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se recibió el audio"
+        }), 400
+
+
+    numero_pregunta = request.form.get(
+        "numero_pregunta"
+    )
+
+    pregunta = request.form.get(
+        "pregunta"
+    )
+
+    respuesta_texto = request.form.get(
+        "respuesta_texto"
+    )
+
+
+    audio_respuesta = archivo.read()
+
+
+    audio_pregunta = crear_audio_pregunta(
+        pregunta
+    )
+
+
+    conexion = sqlite3.connect(
+        "audios.db"
+    )
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute("""
+        INSERT INTO audios (
+            grado,
+            grupo,
+            nombre,
+            numero_pregunta,
+            pregunta,
+            respuesta_texto,
+            audio_pregunta,
+            audio_respuesta
+        )
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    """, (
+        session.get("grado_audio"),
+        session.get("grupo_audio"),
+        session.get("nombre_audio"),
+        numero_pregunta,
+        pregunta,
+        respuesta_texto,
+        audio_pregunta,
+        audio_respuesta
+    ))
+
+
+    conexion.commit()
+
+    conexion.close()
+
+
+    return jsonify({
+        "ok": True
+    })
+
+
+@app.route("/audios")
+def ver_audios():
+
+    conexion = sqlite3.connect(
+        "audios.db"
+    )
+
+    conexion.row_factory = sqlite3.Row
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute("""
+        SELECT *
+        FROM audios
+        ORDER BY id DESC
+    """)
+
+
+    audios = cursor.fetchall()
+
+    conexion.close()
+
+
+    return render_template(
+        "audios.html",
+        audios=audios
+    )
+
+
+@app.route(
+    "/escuchar_pregunta/<int:id>"
+)
+def escuchar_pregunta(id):
+
+    conexion = sqlite3.connect(
+        "audios.db"
+    )
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute(
+        """
+        SELECT audio_pregunta
+        FROM audios
+        WHERE id = ?
+        """,
+        (id,)
+    )
+
+
+    resultado = cursor.fetchone()
+
+    conexion.close()
+
+
+    if not resultado:
+
+        return "Audio no encontrado", 404
+
+
+    if resultado[0] is None:
+
+        return "Audio de pregunta no encontrado", 404
+
+
+    return send_file(
+        BytesIO(resultado[0]),
+        mimetype="audio/wav"
+    )
+
+
+@app.route(
+    "/escuchar_audio/<int:id>"
+)
+def escuchar_audio(id):
+
+    conexion = sqlite3.connect(
+        "audios.db"
+    )
+
+    cursor = conexion.cursor()
+
+
+    cursor.execute(
+        """
+        SELECT audio_respuesta
+        FROM audios
+        WHERE id = ?
+        """,
+        (id,)
+    )
+
+
+    resultado = cursor.fetchone()
+
+    conexion.close()
+
+
+    if not resultado:
+
+        return "Audio no encontrado", 404
+
+
+    if resultado[0] is None:
+
+        return "Audio de respuesta no encontrado", 404
+
+
+    return send_file(
+        BytesIO(resultado[0]),
+        mimetype="audio/webm"
+    )
+
+
+@app.route("/finalizar_audio")
+def finalizar_audio():
+
+    session.clear()
+
+    return jsonify({
+        "ok": True
+    })
+
 
 @app.route("/volver")
 def volver():
@@ -106,10 +440,6 @@ def volver():
         "volver.html"
     )
 
-
-# ==========================================
-# REINICIAR
-# ==========================================
 
 @app.route("/reiniciar")
 def reiniciar():
@@ -121,27 +451,16 @@ def reiniciar():
     )
 
 
-# ==========================================
-# SELECCIÓN ADMIN / ESTUDIANTE
-# ==========================================
+@app.route("/seleccion/<tipo>")
+def seleccion(tipo):
 
-@app.route(
-    "/seleccion",
-    methods=["POST"]
-)
-def seleccion():
-
-    boton = request.form.get(
-        "boton"
-    )
-
-    if boton == "admin":
+    if tipo == "admin":
 
         return render_template(
             "key.html"
         )
 
-    elif boton == "student":
+    elif tipo == "student":
 
         return render_template(
             "select_1.html"
@@ -151,10 +470,6 @@ def seleccion():
         url_for("inicio")
     )
 
-
-# ==========================================
-# SELECCIONAR GRADO
-# ==========================================
 
 @app.route("/grado/<grado>")
 def grado(grado):
@@ -166,10 +481,6 @@ def grado(grado):
     )
 
 
-# ==========================================
-# SELECCIONAR GRUPO
-# ==========================================
-
 @app.route("/grupo/<grupo>")
 def grupo(grupo):
 
@@ -179,10 +490,6 @@ def grupo(grupo):
         "select_e.html"
     )
 
-
-# ==========================================
-# SELECCIONAR EMOCIÓN
-# ==========================================
 
 @app.route("/emocion/<emocion>")
 def emocion(emocion):
@@ -194,11 +501,9 @@ def emocion(emocion):
     )
 
 
-# ==========================================
-# ANÓNIMO O PERSONAL
-# ==========================================
-
-@app.route("/anonimo/<respuesta>")
+@app.route(
+    "/anonimo/<respuesta>"
+)
 def anonimo(respuesta):
 
     if respuesta == "Personal":
@@ -206,6 +511,7 @@ def anonimo(respuesta):
         return render_template(
             "nombre.html"
         )
+
 
     grado_guardado = session.get(
         "grado"
@@ -219,23 +525,21 @@ def anonimo(respuesta):
         "emocion"
     )
 
-    db.guardar_respuesta_general(
 
+    db.guardar_respuesta_general(
         grado_guardado,
         grupo_guardado,
         emocion_guardada
     )
 
+
     session.clear()
+
 
     return redirect(
         url_for("volver")
     )
 
-
-# ==========================================
-# GUARDAR RESPUESTA PERSONAL
-# ==========================================
 
 @app.route(
     "/guardar_nombre",
@@ -247,6 +551,7 @@ def guardar_nombre():
         "nombre"
     )
 
+
     grado_guardado = session.get(
         "grado"
     )
@@ -259,38 +564,30 @@ def guardar_nombre():
         "emocion"
     )
 
-    # Guardar en la base de datos
 
     db.guardar_respuesta_personal(
-
         grado_guardado,
         grupo_guardado,
         nombre,
         emocion_guardada
     )
 
-    # Enviar a WhatsApp
 
     enviar_whatsapp(
-
         nombre,
         grado_guardado,
         grupo_guardado,
         emocion_guardada
     )
 
-    # Limpiar sesión
 
     session.clear()
+
 
     return redirect(
         url_for("volver")
     )
 
-
-# ==========================================
-# CONTRASEÑA ADMIN
-# ==========================================
 
 @app.route(
     "/datos",
@@ -304,9 +601,11 @@ def datos():
             "key.html"
         )
 
+
     password = request.form.get(
         "password"
     )
+
 
     if password == "1234":
 
@@ -314,15 +613,12 @@ def datos():
             "opciones_admin.html"
         )
 
+
     return render_template(
         "key.html",
         error="Contraseña incorrecta"
     )
 
-
-# ==========================================
-# RESPUESTAS GENERALES
-# ==========================================
 
 @app.route("/respuestas_generales")
 def respuestas_generales():
@@ -337,15 +633,19 @@ def respuestas_generales():
         "grupos_completos"
     ]
 
+
     resumen = {}
+
 
     for grupo in grupos:
 
         resumen[grupo] = {}
 
+
         for emocion in emociones:
 
             resumen[grupo][emocion] = 0
+
 
     for (
         grado,
@@ -362,16 +662,16 @@ def respuestas_generales():
 
             continue
 
+
         clave_grupo = (
-            str(grado)
-            +
+            str(grado) +
             str(grupo)
         )
 
+
         if (
             clave_grupo in resumen
-            and
-            emocion in resumen[
+            and emocion in resumen[
                 clave_grupo
             ]
         ):
@@ -380,11 +680,14 @@ def respuestas_generales():
                 clave_grupo
             ][emocion] = cantidad
 
+
     totales_emocion = {}
+
 
     for emocion in emociones:
 
         total = 0
+
 
         for grupo in grupos:
 
@@ -392,33 +695,26 @@ def respuestas_generales():
                 grupo
             ][emocion]
 
+
         totales_emocion[
             emocion
         ] = total
+
 
     total_general = sum(
         totales_emocion.values()
     )
 
+
     return render_template(
-
         "final.html",
-
         emociones=emociones,
-
         grupos=grupos,
-
         resumen=resumen,
-
         totales_emocion=totales_emocion,
-
         total_general=total_general
     )
 
-
-# ==========================================
-# RESPUESTAS PERSONALES
-# ==========================================
 
 @app.route(
     "/respuestas_personales"
@@ -429,47 +725,12 @@ def respuestas_personales():
         db.obtener_respuestas_personales()
     )
 
+
     return render_template(
-
         "respuestas_personales.html",
-
         respuestas=respuestas
     )
 
-
-# ==========================================
-# AGENTE FEELTECH
-# ==========================================
-
-@app.route(
-    "/agente",
-    methods=["GET", "POST"]
-)
-def agente():
-
-    respuesta = ""
-
-    if request.method == "POST":
-
-        pregunta = request.form.get(
-            "pregunta"
-        )
-
-        respuesta = procesar_pregunta(
-            pregunta
-        )
-
-    return render_template(
-
-        "agente.html",
-
-        respuesta=respuesta
-    )
-
-
-# ==========================================
-# EJECUTAR
-# ==========================================
 
 if __name__ == "__main__":
 

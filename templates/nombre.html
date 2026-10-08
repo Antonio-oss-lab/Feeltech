@@ -8,43 +8,37 @@
     <title>Ingresa tu nombre</title>
 
     <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/nombre.css') }}">
+        href="{{ url_for('static', filename='css/result_style.css') }}">
 
 </head>
 
 <body>
+    <div class="contenedor-principal">
+        <h1 class="titulo-feeltech">FEELTECH</h1>
+        
+        <div class="contenedor">
 
-    <div class="contenedor">
+            <form action="/guardar_nombre" method="POST">
 
-        <form action="/guardar_nombre" method="POST">
+                <input
+                    type="text"
+                    name="nombre"
+                    placeholder="Ingresa tu nombre"
+                    required
+                >
 
-            <input
-                type="text"
-                name="nombre"
-                placeholder="Ingresa tu nombre"
-                required
-            >
+                <button type="submit">
 
-            <button type="submit">
+                    Continuar
 
-                Continuar
+                </button>
 
-            </button>
+            </form>
 
-        </form>
-
+        <a href="/" class="boton-volver">
+            Volver
+        </a>
     </div>
-
-    <!-- BOTÓN VOLVER -->
-
-    <a href="javascript:history.back()" class="boton-volver">
-
-        <img
-            src="{{ url_for('static', filename='images/botonvolver.png') }}"
-            alt="Volver">
-
-    </a>
-
 </body>
 
 </html>

@@ -18,38 +18,38 @@
 </head>
 
 <body>
-    <form action="/seleccion" method="POST">
+    <div class="contenedor-principal">
+        <h1 class="titulo-feeltech">FEELTECH</h1>
 
         <ul>
 
             <li>
 
-                <button type="submit"
-                    name="boton"
-                    value="student">
+                <a href="{{ url_for('seleccion', tipo='student') }}">
 
                     Estudiante
 
-                </button>
+                </a>
 
             </li>
 
             <li>
 
-                <button type="submit"
-                    name="boton"
-                    value="admin">
+                <a href="{{ url_for('seleccion', tipo='admin') }}">
 
                     Administrador
 
-                </button>
+                </a>
 
             </li>
 
+        <li>
+            <a href="{{ url_for('modo_audio') }}">
+                <span>Respuesta en audio</span>
+            </a>
+        </li>
         </ul>
-
-    </form>
-
+    </div>
 </body>
 
 </html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Audios - FeelTech</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 40px;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #e8f3f6, #f4f8f9);
+            color: #174a5b;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 45px;
+            margin-bottom: 40px;
+        }
+
+        .audio {
+            background: white;
+            max-width: 750px;
+            margin: 25px auto;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .dato {
+            margin: 8px 0;
+        }
+
+        .seccion {
+            margin-top: 25px;
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .volver {
+            display: block;
+            width: 120px;
+            margin: 35px auto;
+            padding: 12px;
+            text-align: center;
+            text-decoration: none;
+            background: #174a5b;
+            color: white;
+            border-radius: 8px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <h1>Audios de FeelTech</h1>
+
+    {% for audio in audios %}
+
+    <div class="audio">
+
+        <h2>
+            {{ audio.nombre }}
+        </h2>
+
+        <div class="dato">
+            <strong>Grado:</strong>
+            {{ audio.grado }}
+        </div>
+
+        <div class="dato">
+            <strong>Grupo:</strong>
+            {{ audio.grupo }}
+        </div>
+
+        <div class="dato">
+            <strong>Pregunta {{ audio.numero_pregunta }}:</strong>
+            {{ audio.pregunta }}
+        </div>
+
+        <div class="dato">
+            <strong>Respuesta:</strong>
+            {{ audio.respuesta_texto }}
+        </div>
+
+        <div class="dato">
+            <strong>Fecha:</strong>
+            {{ audio.fecha }}
+        </div>
+
+        <div class="seccion">
+
+            <h3>
+                🔊 Audio de la pregunta
+            </h3>
+
+            <audio controls>
+
+                <source
+                    src="{{ url_for(
+                        'escuchar_pregunta',
+                        id=audio.id
+                    ) }}"
+                    type="audio/wav"
+                >
+
+            </audio>
+
+        </div>
+
+        <div class="seccion">
+
+            <h3>
+                🎤 Audio de la respuesta
+            </h3>
+
+            <audio controls>
+
+                <source
+                    src="{{ url_for(
+                        'escuchar_audio',
+                        id=audio.id
+                    ) }}"
+                    type="audio/webm"
+                >
+
+            </audio>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+    <a
+        href="/"
+        class="volver"
+    >
+        Volver
+    </a>
+
+</body>
+
+</html>

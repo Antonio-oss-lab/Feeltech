@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Modo Audio - FeelTech</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/result_style.css') }}">
+</head>
+
+<body>
+
+<div class="contenedor-principal">
+
+    <h1 class="titulo-feeltech">FEELTECH</h1>
+
+    <h2 id="estado">Presiona comenzar</h2>
+
+    <p id="pregunta"></p>
+
+    <button id="comenzar" onclick="comenzarAudio()">
+        Comenzar
+    </button>
+
+    <button id="repetir" onclick="repetirPregunta()" style="display: none;">
+        Repetir
+    </button>
+
+</div>
+
+<script>
+
+const preguntas = [
+    "¿Cómo te sentiste hoy?",
+    "¿Cómo te has sentido durante estos días?",
+    "¿Hay algo que te haya hecho sentir bien?",
+    "¿Hay algo que te haya preocupado o puesto nervioso?",
+    "¿Qué crees que podría ayudarte a sentirte mejor?"
+];
+
+let preguntaActual = 0;
+let grado = "";
+let grupo = "";
+let nombre = "";
+
+const SpeechRecognition =
+    window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const recognition = new SpeechRecognition();
+
+recognition.lang = "es-MX";
+recognition.continuous = false;
+recognition.interimResults = false;
+
+function hablar(texto) {
+
+    return new Promise((resolve) => {
+
+        speechSynthesis.cancel();
+
+        const voz = new SpeechSynthesisUtterance(texto);
+
+        voz.lang = "es-MX";
+        voz.rate = 0.9;
+        voz.volume = 1;
+        voz.pitch = 1;
+
+        voz.onend = () => {
+            resolve();
+        };
+
+        speechSynthesis.speak(voz);
+    });
+}
+
+function escuchar() {
+
+    return new Promise((resolve) => {
+
+        let terminado = false;
+
+        recognition.onresult = function(event) {
+
+            if (terminado) return;
+
+            terminado = true;
+
+            const respuesta =
+                event.results[0][0].transcript;
+
+            resolve(respuesta);
+        };
+
+        recognition.onerror = function() {
+
+            if (terminado) return;
+
+            terminado = true;
+
+            resolve("");
+        };
+
+        recognition.onend = function() {
+
+            if (terminado) return;
+
+            terminado = true;
+
+            resolve("");
+        };
+
+        recognition.start();
+
+        setTimeout(() => {
+
+            if (!terminado) {
+
+                terminado = true;
+
+                recognition.stop();
+
+                resolve("");
+            }
+
+        }, 15000);
+
+    });
+}
+
+async function comenzarAudio() {
+
+    document.getElementById("comenzar").style.display = "none";
+    document.getElementById("repetir").style.display = "block";
+
+    document.getElementById("estado").textContent =
+        "Escuchando...";
+
+    await hablar("¿Cuál es tu grado?");
+
+    grado = await escuchar();
+
+    if (!grado) {
+        await hablar("No pude escucharte. Intenta nuevamente.");
+        return;
+    }
+
+    await hablar("¿Cuál es tu grupo?");
+
+    grupo = await(10000), escuchar();
+
+    if (!grupo) {
+        await hablar("No pude escucharte. Intenta nuevamente.");
+        return;
+    }
+
+    await hablar("¿Cuál es tu nombre?");
+
+    nombre = await escuchar();
+
+    if (!nombre) {
+        await hablar("No pude escucharte. Intenta nuevamente.");
+        return;
+    }
+
+    await guardarDatos();
+
+    await siguientePregunta();
+}
+
+async function siguientePregunta() {
+
+    if (preguntaActual >= preguntas.length) {
+
+        document.getElementById("estado").textContent =
+            "Encuesta terminada";
+
+        await hablar(
+            "Gracias por responder. La encuesta ha terminado."
+        );
+
+        window.location.href = "/finalizar_audio";
+
+        return;
+    }
+
+    const pregunta = preguntas[preguntaActual];
+
+    document.getElementById("pregunta").textContent =
+        pregunta;
+
+    document.getElementById("estado").textContent =
+        "Escuchando la pregunta...";
+
+    await hablar(pregunta);
+
+    document.getElementById("estado").textContent =
+        "Puedes responder ahora.";
+
+    const respuesta = await escuchar();
+
+    if (!respuesta) {
+
+        await hablar(
+            "No pude escuchar tu respuesta. Vamos a repetir la pregunta."
+        );
+
+        return;
+    }
+
+    await guardarRespuesta(
+        preguntaActual + 1,
+        pregunta,
+        respuesta
+    );
+
+    preguntaActual++;
+
+    await hablar("Siguiente pregunta.");
+
+    await siguientePregunta();
+}
+
+async function repetirPregunta() {
+
+    if (preguntaActual >= preguntas.length) {
+        return;
+    }
+
+    const pregunta = preguntas[preguntaActual];
+
+    await hablar(pregunta);
+
+    document.getElementById("estado").textContent =
+        "Puedes responder ahora.";
+
+    const respuesta = await escuchar();
+
+    if (!respuesta) {
+
+        await hablar(
+            "No pude escucharte. Inténtalo nuevamente."
+        );
+
+        return;
+    }
+
+    await guardarRespuesta(
+        preguntaActual + 1,
+        pregunta,
+        respuesta
+    );
+
+    preguntaActual++;
+
+    await siguientePregunta();
+}
+
+async function guardarDatos() {
+
+    await fetch("/guardar_datos_audio", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            grado: grado,
+            grupo: grupo,
+            nombre: nombre
+
+        })
+
+    });
+}
+
+async function guardarRespuesta(
+    numero,
+    pregunta,
+    respuesta
+) {
+
+    await fetch("/guardar_audio", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            numero_pregunta: numero,
+            pregunta: pregunta,
+            respuesta_texto: respuesta
+
+        })
+
+    });
+}
+
+</script>
+
+</body>
+</html>

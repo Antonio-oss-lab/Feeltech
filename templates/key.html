@@ -13,42 +13,45 @@
 </head>
 
 <body>
+    <div class="contenedor-principal">
+        <h1 class="titulo-feeltech">FEELTECH</h1>
 
-    <div class="contenedor">
+        <div class="contenedor">
 
-        <h1>
-            ACCESO ADMINISTRADOR
-        </h1>
+            <h2>
+                ACCESO ADMINISTRADOR
+            </h2>
 
-        <form action="{{ url_for('datos') }}" method="POST">
+            <form action="{{ url_for('datos') }}" method="POST">
 
-            <input
-                type="password"
-                name="password"
-                placeholder="Ingresa la contraseña"
-                required
-            >
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="Ingresa la contraseña"
+                    required
+                >
 
-            <button type="submit">
+                <button type="submit">
 
-                Entrar
+                    Entrar
 
-            </button>
+                </button>
 
-        </form>
+            </form>
 
-        {% if error %}
+            {% if error %}
 
-            <div class="error">
+                <div class="error">
 
-                {{ error }}
+                    {{ error }}
 
-            </div>
+                </div>
 
-        {% endif %}
+            {% endif %}
 
+        </div>
     </div>
-
 </body>
+
 
 </html>
