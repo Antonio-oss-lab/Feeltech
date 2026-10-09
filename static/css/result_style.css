@@ -1,0 +1,264 @@
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    font-family: 'Plus Jakarta Sans', sans-serif;
+
+    background: linear-gradient(
+        135deg,
+        #8db9c4,
+        #68b39c
+    );
+
+    color: #46aa94;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.contenedor-principal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.titulo-feeltech {
+    font-family: Arial, sans-serif;
+
+    font-size: 55px;
+    font-weight: bold;
+
+    text-align: center;
+    letter-spacing: 5px;
+
+    color: #174a5b;
+
+    margin: 0 0 45px 0;
+}
+
+.contenedor-principal ul {
+    display: flex;
+    flex-direction: row;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 30px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+ul.emociones {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+
+    width: 90%;
+    max-width: 900px;
+
+    margin: 0 auto;
+    padding: 0;
+
+    list-style: none;
+}
+
+ul.emociones li {
+    display: flex;
+    justify-content: center;
+}
+
+ul.emociones a {
+    display: block;
+}
+
+ul.emociones img {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+}
+
+.boton-volver {
+    display: inline-flex !important;
+    justify-content: center;
+    align-items: center;
+
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+
+    margin-top: 25px;
+    padding: 7px 16px !important;
+
+    background: white;
+
+    border: 1px solid #d5dfe4;
+    border-radius: 7px;
+
+    color: #174a5b;
+
+    font-size: 12px !important;
+    font-weight: 600;
+
+    text-decoration: none;
+
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    transition: 0.2s ease;
+}
+
+.boton-volver:hover {
+    background: #174a5b;
+    color: white;
+}
+
+.boton-volver:not(.select-e-volver) {
+    padding: 8px 18px;
+    font-size: 13px;
+}
+
+.contenedor-principal li {
+    width: 220px;
+}
+
+.contenedor-principal a {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    width: 100%;
+    height: 70px;
+
+    box-sizing: border-box;
+
+    background: white;
+
+    border: 1px solid #d5dfe4;
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    color: #174a5b;
+
+    font-size: 17px;
+    font-weight: 600;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    transition: 0.2s ease;
+}
+
+.contenedor-principal a:hover {
+    background: #174a5b;
+
+    color: white;
+
+    border-color: #174a5b;
+
+    transform: translateY(-2px);
+
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+body {
+    position: relative;
+    isolation: isolate;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "☺";
+    position: fixed;
+    top: 90px;
+    left: 25px;
+    width: 95px;
+    height: 95px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 65px;
+    color: #438fc4;
+    background: rgba(107, 190, 226, 0.20);
+    border: 3px solid rgba(67, 143, 196, 0.35);
+    border-radius: 50%;
+    transform: rotate(-12deg);
+    pointer-events: none;
+    z-index: -1;
+}
+
+body::after {
+    content: "♡";
+    position: fixed;
+    right: 30px;
+    bottom: 75px;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 85px;
+    color: #42a985;
+    background: rgba(94, 201, 160, 0.17);
+    border: 3px solid rgba(66, 169, 133, 0.30);
+    border-radius: 35%;
+    transform: rotate(12deg);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.decoracion-emocional {
+    position: fixed;
+    font-size: 38px;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    opacity: 0.75;
+}
+
+.decoracion-emocional.superior {
+    top: 35px;
+    right: 12%;
+    color: #e6a23c;
+}
+
+.decoracion-emocional.inferior {
+    bottom: 35px;
+    left: 12%;
+    color: #438fc4;
+}
+
+@media (max-width: 600px) {
+    body::before {
+        top: 80px;
+        left: -20px;
+        width: 65px;
+        height: 65px;
+        font-size: 43px;
+    }
+
+    body::after {
+        right: -20px;
+        bottom: 45px;
+        width: 70px;
+        height: 70px;
+        font-size: 58px;
+    }
+
+    .decoracion-emocional {
+        font-size: 27px;
+    }
+
+    .decoracion-emocional.superior {
+        top: 18px;
+        right: 8%;
+    }
+
+    .decoracion-emocional.inferior {
+        bottom: 15px;
+        left: 8%;
+    }
+}

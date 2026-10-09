@@ -1,0 +1,75 @@
+body{
+    margin: 0;
+    padding: 20px;
+
+    min-height: 100vh;
+
+    background: #061a3a;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1{
+    color: white;
+
+    text-align: center;
+
+    margin-bottom: 25px;
+}
+
+table{
+    width: 100%;
+
+    border-collapse: collapse;
+
+    background: white;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    text-align: center;
+}
+
+th{
+    background: #08275a;
+
+    color: white;
+
+    padding: 14px;
+
+    font-size: 16px;
+}
+
+td{
+    padding: 14px;
+
+    border: 1px solid #ddd;
+
+    font-size: 16px;
+}
+
+tr:hover{
+    background: #f3f8ff;
+}
+
+.boton-volver{
+    position: fixed;
+
+    right: 20px;
+    bottom: 20px;
+
+    z-index: 999;
+}
+
+.boton-volver img{
+    width: 110px;
+
+    cursor: pointer;
+
+    transition: 0.3s;
+}
+
+.boton-volver img:hover{
+    transform: scale(1.08);
+}
