@@ -6,8 +6,8 @@ body {
 
     background: linear-gradient(
         135deg,
-        #8db9c4,
-        #68b39c
+        #7da5af,
+        #5b9987
     );
 
     color: #46aa94;
@@ -93,9 +93,9 @@ ul.emociones img {
     margin-top: 25px;
     padding: 7px 16px !important;
 
-    background: white;
+    background: rgb(187, 163, 163);
 
-    border: 1px solid #d5dfe4;
+    border: 1px solid #cad6db;
     border-radius: 7px;
 
     color: #174a5b;
@@ -168,97 +168,108 @@ body {
     position: relative;
     isolation: isolate;
     overflow-x: hidden;
+
+    background-color: #5b9987;
+    background-image:
+        radial-gradient(circle at 8% 20%, rgba(42, 114, 180, 0.30) 0 7px, transparent 8px),
+        radial-gradient(circle at 90% 25%, rgba(55, 180, 145, 0.30) 0 9px, transparent 10px),
+        radial-gradient(circle at 15% 78%, rgba(255, 190, 75, 0.32) 0 7px, transparent 8px),
+        radial-gradient(circle at 85% 80%, rgba(110, 145, 220, 0.28) 0 8px, transparent 9px),
+        radial-gradient(circle, rgba(42, 114, 180, 0.14) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.20) 0 2px, transparent 3px),
+        radial-gradient(circle, rgba(55, 180, 145, 0.16) 0 4px, transparent 5px),
+        radial-gradient(ellipse at 50% 45%, rgba(255, 255, 255, 0.13), transparent 48%),
+        linear-gradient(135deg, #7da5af, #5b9987);
+
+    background-size:
+        auto,
+        auto,
+        auto,
+        auto,
+        32px 32px,
+        53px 53px,
+        75px 75px,
+        100% 100%,
+        100% 100%;
+
+    background-position:
+        center,
+        center,
+        center,
+        center,
+        0 0,
+        17px 25px,
+        35px 12px,
+        center,
+        center;
+
+    background-attachment: fixed;
 }
 
 body::before {
     content: "☺";
     position: fixed;
     top: 90px;
-    left: 25px;
-    width: 95px;
-    height: 95px;
+    left: -35px;
+    width: 155px;
+    height: 155px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 65px;
-    color: #438fc4;
-    background: rgba(107, 190, 226, 0.20);
-    border: 3px solid rgba(67, 143, 196, 0.35);
+    font-size: 78px;
+    color: rgba(42, 114, 180, 0.60);
+    background: rgba(255, 255, 255, 0.17);
+    border: 12px solid rgba(42, 145, 200, 0.25);
     border-radius: 50%;
-    transform: rotate(-12deg);
+    box-shadow:
+        45px 45px 0 -12px rgba(55, 180, 145, 0.25),
+        65px -20px 0 -17px rgba(255, 190, 75, 0.30),
+        20px 125px 0 -25px rgba(255, 255, 255, 0.30);
     pointer-events: none;
-    z-index: -1;
+    z-index: 0;
 }
 
 body::after {
-    content: "♡";
+    content: "♥";
     position: fixed;
-    right: 30px;
-    bottom: 75px;
-    width: 100px;
-    height: 100px;
+    right: -30px;
+    bottom: 65px;
+    width: 135px;
+    height: 135px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 85px;
-    color: #42a985;
-    background: rgba(94, 201, 160, 0.17);
-    border: 3px solid rgba(66, 169, 133, 0.30);
-    border-radius: 35%;
-    transform: rotate(12deg);
+    font-size: 72px;
+    color: rgba(55, 145, 125, 0.65);
+    background: rgba(255, 255, 255, 0.16);
+    border: 12px solid rgba(55, 180, 145, 0.23);
+    border-radius: 38px;
+    transform: rotate(18deg);
+    box-shadow:
+        -45px -35px 0 -10px rgba(255, 190, 75, 0.25),
+        -70px 35px 0 -20px rgba(110, 145, 220, 0.30),
+        -20px -100px 0 -25px rgba(255, 255, 255, 0.30);
     pointer-events: none;
-    z-index: -1;
-}
-
-.decoracion-emocional {
-    position: fixed;
-    font-size: 38px;
-    pointer-events: none;
-    user-select: none;
     z-index: 0;
-    opacity: 0.75;
-}
-
-.decoracion-emocional.superior {
-    top: 35px;
-    right: 12%;
-    color: #e6a23c;
-}
-
-.decoracion-emocional.inferior {
-    bottom: 35px;
-    left: 12%;
-    color: #438fc4;
 }
 
 @media (max-width: 600px) {
     body::before {
-        top: 80px;
-        left: -20px;
-        width: 65px;
-        height: 65px;
-        font-size: 43px;
+        top: 100px;
+        left: -65px;
+        width: 110px;
+        height: 110px;
+        font-size: 55px;
+        border-width: 9px;
     }
 
     body::after {
-        right: -20px;
+        right: -50px;
         bottom: 45px;
-        width: 70px;
-        height: 70px;
-        font-size: 58px;
-    }
-
-    .decoracion-emocional {
-        font-size: 27px;
-    }
-
-    .decoracion-emocional.superior {
-        top: 18px;
-        right: 8%;
-    }
-
-    .decoracion-emocional.inferior {
-        bottom: 15px;
-        left: 8%;
+        width: 95px;
+        height: 95px;
+        font-size: 50px;
+        border-width: 8px;
     }
 }
+
