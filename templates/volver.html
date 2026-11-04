@@ -14,12 +14,8 @@
 
 <body>
     <div class="contenedor-principal">
+        <h1>Gracias por compartir cómo te sientes.</h1>
         <div class="contenedor">
-
-            <h1>
-                Gracias por compartir<br>
-                cómo te sientes.
-            </h1>
 
             <p>
                 Tus emociones son importantes y tu mensaje ha sido
@@ -32,9 +28,13 @@
                 Si lo deseas, puedes acercarte voluntariamente
                 a tu orientador educativo.
             </p>
-
+            <li>
+                <a href="{{ url_for('inicio') }}" class="boton-volver-inicio">
+                    Volver al inicio
+                </a>
+            </li>
         </div>
-    </body>
+    </div>
 </body>
 
 </html>

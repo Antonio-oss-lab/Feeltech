@@ -201,13 +201,11 @@ def guardar_datos_audio():
             "mensaje": "No se recibieron datos"
         }), 400
 
-
     grado = datos.get("grado")
 
     grupo = datos.get("grupo")
 
     nombre = datos.get("nombre")
-
 
     if not grado or not grupo or not nombre:
 
@@ -216,13 +214,11 @@ def guardar_datos_audio():
             "mensaje": "Faltan datos"
         }), 400
 
-
     session["grado_audio"] = grado
 
     session["grupo_audio"] = grupo
 
     session["nombre_audio"] = nombre
-
 
     return jsonify({
         "ok": True
@@ -244,7 +240,6 @@ def guardar_audio():
             "mensaje": "No se recibió el audio"
         }), 400
 
-
     numero_pregunta = request.form.get(
         "numero_pregunta"
     )
@@ -257,21 +252,17 @@ def guardar_audio():
         "respuesta_texto"
     )
 
-
     audio_respuesta = archivo.read()
-
 
     audio_pregunta = crear_audio_pregunta(
         pregunta
     )
-
 
     conexion = sqlite3.connect(
         "audios.db"
     )
 
     cursor = conexion.cursor()
-
 
     cursor.execute("""
         INSERT INTO audios (
@@ -296,11 +287,9 @@ def guardar_audio():
         audio_respuesta
     ))
 
-
     conexion.commit()
 
     conexion.close()
-
 
     return jsonify({
         "ok": True
@@ -318,18 +307,15 @@ def ver_audios():
 
     cursor = conexion.cursor()
 
-
     cursor.execute("""
         SELECT *
         FROM audios
         ORDER BY id DESC
     """)
 
-
     audios = cursor.fetchall()
 
     conexion.close()
-
 
     return render_template(
         "audios.html",
@@ -348,7 +334,6 @@ def escuchar_pregunta(id):
 
     cursor = conexion.cursor()
 
-
     cursor.execute(
         """
         SELECT audio_pregunta
@@ -358,21 +343,17 @@ def escuchar_pregunta(id):
         (id,)
     )
 
-
     resultado = cursor.fetchone()
 
     conexion.close()
-
 
     if not resultado:
 
         return "Audio no encontrado", 404
 
-
     if resultado[0] is None:
 
         return "Audio de pregunta no encontrado", 404
-
 
     return send_file(
         BytesIO(resultado[0]),
@@ -391,7 +372,6 @@ def escuchar_audio(id):
 
     cursor = conexion.cursor()
 
-
     cursor.execute(
         """
         SELECT audio_respuesta
@@ -401,21 +381,17 @@ def escuchar_audio(id):
         (id,)
     )
 
-
     resultado = cursor.fetchone()
 
     conexion.close()
-
 
     if not resultado:
 
         return "Audio no encontrado", 404
 
-
     if resultado[0] is None:
 
         return "Audio de respuesta no encontrado", 404
-
 
     return send_file(
         BytesIO(resultado[0]),
@@ -512,7 +488,6 @@ def anonimo(respuesta):
             "nombre.html"
         )
 
-
     grado_guardado = session.get(
         "grado"
     )
@@ -525,16 +500,13 @@ def anonimo(respuesta):
         "emocion"
     )
 
-
     db.guardar_respuesta_general(
         grado_guardado,
         grupo_guardado,
         emocion_guardada
     )
 
-
     session.clear()
-
 
     return redirect(
         url_for("volver")
@@ -551,7 +523,6 @@ def guardar_nombre():
         "nombre"
     )
 
-
     grado_guardado = session.get(
         "grado"
     )
@@ -564,14 +535,12 @@ def guardar_nombre():
         "emocion"
     )
 
-
     db.guardar_respuesta_personal(
         grado_guardado,
         grupo_guardado,
         nombre,
         emocion_guardada
     )
-
 
     enviar_whatsapp(
         nombre,
@@ -580,9 +549,7 @@ def guardar_nombre():
         emocion_guardada
     )
 
-
     session.clear()
-
 
     return redirect(
         url_for("volver")
@@ -601,18 +568,15 @@ def datos():
             "key.html"
         )
 
-
     password = request.form.get(
         "password"
     )
-
 
     if password == "1234":
 
         return render_template(
             "opciones_admin.html"
         )
-
 
     return render_template(
         "key.html",
@@ -633,19 +597,15 @@ def respuestas_generales():
         "grupos_completos"
     ]
 
-
     resumen = {}
-
 
     for grupo in grupos:
 
         resumen[grupo] = {}
 
-
         for emocion in emociones:
 
             resumen[grupo][emocion] = 0
-
 
     for (
         grado,
@@ -662,12 +622,10 @@ def respuestas_generales():
 
             continue
 
-
         clave_grupo = (
             str(grado) +
             str(grupo)
         )
-
 
         if (
             clave_grupo in resumen
@@ -680,14 +638,11 @@ def respuestas_generales():
                 clave_grupo
             ][emocion] = cantidad
 
-
     totales_emocion = {}
-
 
     for emocion in emociones:
 
         total = 0
-
 
         for grupo in grupos:
 
@@ -695,16 +650,13 @@ def respuestas_generales():
                 grupo
             ][emocion]
 
-
         totales_emocion[
             emocion
         ] = total
 
-
     total_general = sum(
         totales_emocion.values()
     )
-
 
     return render_template(
         "final.html",
@@ -724,7 +676,6 @@ def respuestas_personales():
     respuestas = (
         db.obtener_respuestas_personales()
     )
-
 
     return render_template(
         "respuestas_personales.html",

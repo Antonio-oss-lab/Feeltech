@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap');
+
 body {
     margin: 0;
     min-height: 100vh;
 
-    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-family: 'Fredoka', sans-serif;
 
     background: linear-gradient(
         135deg,
@@ -10,7 +12,7 @@ body {
         #5b9987
     );
 
-    color: #46aa94;
+    color: #09220b;
 
     display: flex;
     justify-content: center;
@@ -24,7 +26,7 @@ body {
 }
 
 .titulo-feeltech {
-    font-family: Arial, sans-serif;
+    font-family: 'Fredoka', sans-serif;
 
     font-size: 55px;
     font-weight: bold;
@@ -273,3 +275,66 @@ body::after {
     }
 }
 
+.contenedor-principal p {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 1.6;
+    text-align: center;
+    max-width: 750px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+.contenedor-principal h1 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    text-align: center;
+    margin: 0 auto 25px;
+}
+
+.contenedor-principal h2 {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    margin: 20px auto;
+}
+
+@media (max-width: 600px) {
+    .contenedor-principal p {
+        font-size: 20px;
+    }
+
+    .contenedor-principal h1 {
+        font-size: 32px;
+    }
+
+    .contenedor-principal h2 {
+        font-size: 26px;
+    }
+}
+
+.boton-volver-inicio {
+    display: block;
+    width: 50%;
+    box-sizing: border-box;
+    margin: 20px auto 0;
+    padding: 6px 12px;
+    background: #2a72b4;
+    color: white;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0 3px 0 rgba(25, 75, 110, 0.25);
+    transition: 0.2s ease;
+}
+
+.boton-volver-inicio:hover {
+    background: #235f91;
+    transform: translateY(-2px);
+}

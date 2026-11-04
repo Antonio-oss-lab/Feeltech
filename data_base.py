@@ -7,6 +7,7 @@ BASE_DIR = os.path.dirname(
     os.path.abspath(__file__)
 )
 
+
 DB_PATH = os.path.join(
     BASE_DIR,
     "data_base_1.db"
@@ -25,11 +26,6 @@ class Database:
         return sqlite3.connect(
             self.db_path
         )
-
-
-    # ==========================================
-    # GUARDAR RESPUESTA GENERAL
-    # ==========================================
 
     def guardar_respuesta_general(
         self,
@@ -58,11 +54,6 @@ class Database:
         conexion.commit()
 
         conexion.close()
-
-
-    # ==========================================
-    # GUARDAR RESPUESTA PERSONAL
-    # ==========================================
 
     def guardar_respuesta_personal(
         self,
@@ -106,11 +97,6 @@ class Database:
 
         conexion.close()
 
-
-    # ==========================================
-    # OBTENER RESPUESTAS GENERALES
-    # ==========================================
-
     def obtener_resumen(self):
 
         conexion = self.conectar()
@@ -130,11 +116,6 @@ class Database:
         conexion.close()
 
         return registros
-
-
-    # ==========================================
-    # OBTENER RESPUESTAS PERSONALES
-    # ==========================================
 
     def obtener_respuestas_personales(self):
 
@@ -156,11 +137,6 @@ class Database:
         conexion.close()
 
         return respuestas
-
-
-    # ==========================================
-    # OBTENER DATOS DE UN GRUPO
-    # ==========================================
 
     def obtener_datos_grupo(self, grupo):
 
@@ -202,11 +178,6 @@ class Database:
             total += cantidad
 
         return datos, total
-
-
-    # ==========================================
-    # OBTENER ESTADO DE UN GRUPO
-    # ==========================================
 
     def obtener_estado_grupo(self, grupo):
 
@@ -298,11 +269,6 @@ class Database:
             "emociones": datos
         }
 
-
-    # ==========================================
-    # OBTENER CURSO CON MAYOR PORCENTAJE NEGATIVO
-    # ==========================================
-
     def obtener_curso_peor(self):
 
         grupos = [
@@ -350,11 +316,6 @@ class Database:
 
 
         return resultados[0]
-
-
-    # ==========================================
-    # CONTAR UNA EMOCIÓN EN UN GRUPO
-    # ==========================================
 
     def obtener_emocion_grupo(
         self,

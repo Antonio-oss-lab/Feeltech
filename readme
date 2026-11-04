@@ -1,0 +1,54 @@
+FeelTech 💙
+Descripción del proyecto
+
+FeelTech es una aplicación web creada para ayudar a conocer y comprender el estado emocional de los estudiantes dentro de su entorno escolar. El proyecto busca ofrecer un espacio sencillo, accesible y seguro donde los alumnos puedan expresar cómo se sienten, ya sea de manera anónima o compartiendo sus datos personales.
+
+A través de esta plataforma, los estudiantes pueden registrar sus emociones y el administrador puede consultar la información recopilada para identificar las emociones que se presentan en los diferentes grados y grupos de la escuela. De esta manera, FeelTech busca facilitar la comunicación y el seguimiento emocional dentro de la comunidad estudiantil.
+
+Objetivo general
+
+Crear una plataforma que permita a los estudiantes expresar sus emociones de manera fácil y organizada, y que ayude al personal educativo a conocer mejor las necesidades emocionales de los alumnos. También busca fomentar la importancia de hablar sobre los sentimientos y reconocer que todas las emociones son válidas.
+
+¿Cómo funciona?
+
+El estudiante entra a la plataforma y selecciona su grado y grupo. Después, elige la emoción que representa cómo se siente en ese momento. Al terminar, puede decidir si desea compartir su respuesta de forma anónima o personal.
+
+Cuando el estudiante selecciona la opción anónima, su respuesta se registra sin incluir su nombre. Si elige la opción personal, puede escribir su nombre y su respuesta se guarda junto con los demás datos. Además, se envía una notificación por WhatsApp para informar que se recibió una nueva respuesta personal.
+
+Funciones principales
+
+Selección de grado y grupo: permite organizar las respuestas de acuerdo con el grado escolar y el grupo al que pertenece cada estudiante.
+
+Registro de emociones: ofrece diferentes opciones para que los alumnos indiquen cómo se sienten.
+
+Respuestas anónimas: permite compartir emociones sin proporcionar el nombre del estudiante.
+
+Respuestas personales: permite registrar el nombre del alumno junto con su grado, grupo y emoción seleccionada.
+
+Panel de administración: cuenta con un acceso exclusivo para el administrador, desde donde se pueden consultar los registros.
+
+Consulta de respuestas generales: muestra un resumen de las emociones registradas, organizado por grupo, para observar cómo se distribuyen las respuestas.
+
+Consulta de respuestas personales: permite revisar las respuestas que los estudiantes decidieron compartir con su nombre.
+
+Notificaciones por WhatsApp: avisa cuando se registra una respuesta personal, facilitando que el personal encargado esté al tanto de los nuevos registros.
+
+Asistente virtual: permite realizar preguntas sobre la información registrada y obtener respuestas relacionadas con las emociones de los estudiantes y sus grupos.
+
+Importancia del proyecto
+
+Las emociones forman parte de la vida diaria y pueden influir en la convivencia, la participación y el aprendizaje de los estudiantes. Sin embargo, no siempre resulta fácil expresar lo que sentimos o pedir ayuda cuando la necesitamos.
+
+FeelTech pretende facilitar esa expresión mediante una plataforma digital en la que los alumnos puedan compartir su estado emocional de una manera sencilla. La información recopilada puede servir como apoyo para que el personal educativo conozca mejor las experiencias de los estudiantes y detecte cuándo podría ser necesario brindar acompañamiento.
+
+El proyecto también busca promover la empatía, la comunicación y la importancia de escuchar a los demás, creando conciencia sobre el bienestar emocional dentro de la escuela.
+
+Tecnologías utilizadas
+
+El proyecto utiliza herramientas de desarrollo web para crear una plataforma interactiva, almacenar la información de los estudiantes y facilitar la consulta de los registros. También integra un servicio de notificaciones por WhatsApp y un asistente virtual para realizar consultas sobre los datos guardados.
+
+Resultados esperados
+
+Con FeelTech se espera que los estudiantes tengan una forma accesible de expresar sus emociones y que el personal educativo cuente con información organizada para comprender mejor el ambiente emocional de los grupos.
+
+Además, se busca que el proyecto contribuya a fomentar una cultura escolar en la que hablar de las emociones sea algo natural, se respete la privacidad de los estudiantes y se facilite el acceso a orientación y apoyo cuando sea necesario.
