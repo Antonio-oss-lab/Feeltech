@@ -2,18 +2,11 @@
 <html lang="es">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Audios - FeelTech</title>
 
     <style>
-
         body {
             margin: 0;
             padding: 40px;
@@ -62,30 +55,70 @@
             border-radius: 8px;
         }
 
+        .vacio {
+            text-align: center;
+            margin: 40px auto;
+        }
     </style>
-
 </head>
 
 <body>
 
     <h1>Audios de FeelTech</h1>
 
+    <h2 style="text-align:center;">Entrevistas completas</h2>
+
+    {% for entrevista in entrevistas %}
+
+    <div class="audio">
+
+        <h2>{{ entrevista.nombre }}</h2>
+
+        <div class="dato">
+            <strong>Grado:</strong> {{ entrevista.grado }}
+        </div>
+
+        <div class="dato">
+            <strong>Grupo:</strong> {{ entrevista.grupo }}
+        </div>
+
+        <div class="dato">
+            <strong>Fecha:</strong> {{ entrevista.fecha }}
+        </div>
+
+        <div class="seccion">
+            <h3>🎤 Grabación completa</h3>
+
+            <audio controls>
+                <source
+                    src="{{ url_for('escuchar_entrevista', id=entrevista.id) }}"
+                    type="{{ entrevista.tipo_audio }}"
+                >
+            </audio>
+        </div>
+
+    </div>
+
+    {% else %}
+
+    <p class="vacio">Todavía no hay entrevistas completas guardadas.</p>
+
+    {% endfor %}
+
+    <h2 style="text-align:center;">Grabaciones individuales anteriores</h2>
+
     {% for audio in audios %}
 
     <div class="audio">
 
-        <h2>
-            {{ audio.nombre }}
-        </h2>
+        <h2>{{ audio.nombre }}</h2>
 
         <div class="dato">
-            <strong>Grado:</strong>
-            {{ audio.grado }}
+            <strong>Grado:</strong> {{ audio.grado }}
         </div>
 
         <div class="dato">
-            <strong>Grupo:</strong>
-            {{ audio.grupo }}
+            <strong>Grupo:</strong> {{ audio.grupo }}
         </div>
 
         <div class="dato">
@@ -99,61 +132,40 @@
         </div>
 
         <div class="dato">
-            <strong>Fecha:</strong>
-            {{ audio.fecha }}
+            <strong>Fecha:</strong> {{ audio.fecha }}
         </div>
 
         <div class="seccion">
-
-            <h3>
-                🔊 Audio de la pregunta
-            </h3>
+            <h3>🔊 Audio de la pregunta</h3>
 
             <audio controls>
-
                 <source
-                    src="{{ url_for(
-                        'escuchar_pregunta',
-                        id=audio.id
-                    ) }}"
+                    src="{{ url_for('escuchar_pregunta', id=audio.id) }}"
                     type="audio/wav"
                 >
-
             </audio>
-
         </div>
 
         <div class="seccion">
-
-            <h3>
-                🎤 Audio de la respuesta
-            </h3>
+            <h3>🎤 Audio de la respuesta</h3>
 
             <audio controls>
-
                 <source
-                    src="{{ url_for(
-                        'escuchar_audio',
-                        id=audio.id
-                    ) }}"
+                    src="{{ url_for('escuchar_audio', id=audio.id) }}"
                     type="audio/webm"
                 >
-
             </audio>
-
         </div>
 
     </div>
 
+    {% else %}
+
+    <p class="vacio">No hay grabaciones individuales anteriores.</p>
+
     {% endfor %}
 
-    <a
-        href="/"
-        class="volver"
-    >
-        Volver
-    </a>
+    <a href="/" class="volver">Volver</a>
 
 </body>
-
 </html>

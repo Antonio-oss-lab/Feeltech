@@ -92,6 +92,41 @@ def crear_base_audio():
         )
     """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS entrevistas_audio (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            grado TEXT,
+            grupo TEXT,
+            nombre TEXT,
+            audio_completo BLOB,
+            tipo_audio TEXT,
+            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    cursor.execute("PRAGMA table_info(audios)")
+    columnas = [columna[1] for columna in cursor.fetchall()]
+
+    columnas_necesarias = {
+        "grado": "TEXT",
+        "grupo": "TEXT",
+        "nombre": "TEXT",
+        "numero_pregunta": "INTEGER",
+        "pregunta": "TEXT",
+        "respuesta_texto": "TEXT",
+        "audio_pregunta": "BLOB",
+        "audio_respuesta": "BLOB",
+        "fecha": "TIMESTAMP"
+    }
+
+    for nombre, tipo in columnas_necesarias.items():
+
+        if nombre not in columnas:
+
+            cursor.execute(
+                f"ALTER TABLE audios ADD COLUMN {nombre} {tipo}"
+            )
+
     conexion.commit()
 
     conexion.close()
@@ -226,6 +261,69 @@ def guardar_datos_audio():
 
 
 @app.route(
+    "/guardar_audio_completo",
+    methods=["POST"]
+)
+def guardar_audio_completo():
+
+    archivo = request.files.get("audio_completo")
+
+    if not archivo:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "No se recibió el audio"
+        }), 400
+
+    grado = session.get("grado_audio")
+    grupo = session.get("grupo_audio")
+    nombre = session.get("nombre_audio")
+
+    if not grado or not grupo or not nombre:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "Faltan los datos del estudiante"
+        }), 400
+
+    audio = archivo.read()
+
+    if not audio:
+
+        return jsonify({
+            "ok": False,
+            "mensaje": "El archivo está vacío"
+        }), 400
+
+    conexion = sqlite3.connect("audios.db")
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        INSERT INTO entrevistas_audio (
+            grado,
+            grupo,
+            nombre,
+            audio_completo,
+            tipo_audio
+        )
+        VALUES (?, ?, ?, ?, ?)
+    """, (
+        grado,
+        grupo,
+        nombre,
+        audio,
+        archivo.mimetype or "audio/webm"
+    ))
+
+    conexion.commit()
+    conexion.close()
+
+    return jsonify({
+        "ok": True
+    })
+
+
+@app.route(
     "/guardar_audio",
     methods=["POST"]
 )
@@ -299,10 +397,7 @@ def guardar_audio():
 @app.route("/audios")
 def ver_audios():
 
-    conexion = sqlite3.connect(
-        "audios.db"
-    )
-
+    conexion = sqlite3.connect("audios.db")
     conexion.row_factory = sqlite3.Row
 
     cursor = conexion.cursor()
@@ -315,11 +410,20 @@ def ver_audios():
 
     audios = cursor.fetchall()
 
+    cursor.execute("""
+        SELECT *
+        FROM entrevistas_audio
+        ORDER BY id DESC
+    """)
+
+    entrevistas = cursor.fetchall()
+
     conexion.close()
 
     return render_template(
         "audios.html",
-        audios=audios
+        audios=audios,
+        entrevistas=entrevistas
     )
 
 
@@ -399,14 +503,40 @@ def escuchar_audio(id):
     )
 
 
+@app.route(
+    "/escuchar_entrevista/<int:id>"
+)
+def escuchar_entrevista(id):
+
+    conexion = sqlite3.connect("audios.db")
+    cursor = conexion.cursor()
+
+    cursor.execute("""
+        SELECT audio_completo, tipo_audio
+        FROM entrevistas_audio
+        WHERE id = ?
+    """, (id,))
+
+    resultado = cursor.fetchone()
+    conexion.close()
+
+    if not resultado or not resultado[0]:
+        return "Entrevista no encontrada", 404
+
+    return send_file(
+        BytesIO(resultado[0]),
+        mimetype=resultado[1]
+    )
+
+
 @app.route("/finalizar_audio")
 def finalizar_audio():
 
     session.clear()
 
-    return jsonify({
-        "ok": True
-    })
+    return redirect(
+        url_for("volver")
+    )
 
 
 @app.route("/volver")
@@ -611,7 +741,7 @@ def respuestas_generales():
         grado,
         grupo,
         emocion,
-        cantidad
+        cantidad,
     ) in registros:
 
         if (
@@ -685,6 +815,4 @@ def respuestas_personales():
 
 if __name__ == "__main__":
 
-    app.run(
-        debug=True
-    )
+    app.run(debug=True)
